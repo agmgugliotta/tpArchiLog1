@@ -5,7 +5,16 @@ using System.Threading.Tasks;
 
 namespace CatalogAPI.Models
 {
-    public class Class
+    public class Product
     {
+        public int ID { get; set; }
+
+        public int Name { get; set; }
+
+        public int Description { get; set; }
+
+        public int Price { get; set; }
+
+
     }
 }
