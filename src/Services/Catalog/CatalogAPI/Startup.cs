@@ -26,15 +26,22 @@ namespace CatalogAPI
                 app.UseDeveloperExceptionPage();
             }
 
+            // app.Use(test);
+
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGet("/", async context =>
                 {
-                    await context.Response.WriteAsync("Hello World!");
+                    endpoints.MapControllers();
                 });
             });
         }
+
+        /*private RequestDelegate test(RequestDelegate s)
+        {
+            return s;
+        }*/
     }
 }
