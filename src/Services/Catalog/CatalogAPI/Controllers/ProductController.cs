@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using CatalogAPI.Data;
 using CatalogAPI.Models;
@@ -26,7 +27,9 @@ namespace CatalogAPI.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<ActionResult> GetProducts()
         {
-            return Ok(new List<Product>());
+            var products = _db.Products;
+
+            return Ok(products);
         }
 
         /*[HttpGet]
