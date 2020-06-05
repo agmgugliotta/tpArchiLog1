@@ -19,6 +19,7 @@ namespace CatalogAPI.Models
         public int Description { get; set; }
 
         [Column(TypeName = "decimal(6,2)")]
+        [Required]
         public decimal Price { get; set; }
     }
 }
