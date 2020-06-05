@@ -32,6 +32,23 @@ namespace CatalogAPI.Controllers
             return Ok(products);
         }
 
+        [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.Created)]
+        public async Task<ActionResult> PostProduct([FromBody]Product product)
+        {
+            if (ModelState.IsValid)
+            {
+                _db.Products.Add(product);
+                await _db.SaveChangesAsync();
+
+                return Created("", product);
+            }
+            else
+                return BadRequest(ModelState);
+        }
+            
+
         /*[HttpGet]
         [ProducesResponseType(typeof(IEnumerable<Product>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
