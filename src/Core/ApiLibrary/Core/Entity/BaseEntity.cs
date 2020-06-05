@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace CatalogAPI.Core.Entity
 {
-    public abstract class Entity
+    public abstract class BaseEntity
     {
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdateAt { get; set; }

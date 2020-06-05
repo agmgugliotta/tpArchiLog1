@@ -8,6 +8,7 @@ using CatalogAPI.Data;
 using CatalogAPI.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CatalogAPI.Controllers
 {
@@ -27,7 +28,7 @@ namespace CatalogAPI.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<ActionResult> GetProducts()
         {
-            var products = _db.Products;
+            var products = _db.Products.Where(x => x.DeletedAt == null);
 
             return Ok(products);
         }
@@ -47,7 +48,22 @@ namespace CatalogAPI.Controllers
             else
                 return BadRequest(ModelState);
         }
-            
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        public async Task<ActionResult> DeleteProduct([FromRoute] int id)
+        {
+            var product = await _db.Products.SingleOrDefaultAsync(x => x.ID == id);
+            if (product == null)
+                return NotFound();
+            _db.Remove(product);
+            //product.DeletedAt = DateTime.Now;
+
+            await _db.SaveChangesAsync();
+            return NoContent();
+        }
+
 
         /*[HttpGet]
         [ProducesResponseType(typeof(IEnumerable<Product>), (int)HttpStatusCode.OK)]

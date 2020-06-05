@@ -21,6 +21,7 @@ namespace CatalogAPI.Core.Entity
 
         public override int SaveChanges()
         {
+            AddTracking();
             return base.SaveChanges();
         }
 
@@ -32,22 +33,30 @@ namespace CatalogAPI.Core.Entity
 
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
         {
+            AddTracking();
             return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
         }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
+            AddTracking();
             return base.SaveChangesAsync(cancellationToken);
         }
 
         private void AddTracking()
         {
-            var entries = ChangeTracker.Entries().Where(x => x.Entity is Entity && (x.State == EntityState.Added || x.State == EntityState.Modified));
+            var entries = ChangeTracker.Entries().Where(x => x.Entity is BaseEntity && (x.State == EntityState.Added || x.State == EntityState.Modified));
             foreach (var item in entries)
             {
-                if(item.State == EntityState.Added)
-                    ((Entity)item.Entity).CreatedAt = DateTime.Now;
-                ((Entity)item.Entity).UpdateAt = DateTime.Now;
+                if (item.State == EntityState.Deleted)
+                {
+                    ((BaseEntity)item.Entity).DeleteAt = DateTime.Now;
+                    item.State = EntityState.Modified;
+                }
+
+                if (item.State == EntityState.Added)
+                    ((BaseEntity)item.Entity).CreatedAt = DateTime.Now;
+                ((BaseEntity)item.Entity).UpdateAt = DateTime.Now;
             }
         }
     }

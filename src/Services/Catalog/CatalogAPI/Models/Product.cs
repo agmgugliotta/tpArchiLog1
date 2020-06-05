@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace CatalogAPI.Models
 {
-    public class Product : Entity
+    public class Product : BaseModel<int>
     {
-        public int ID { get; set; }
+        //public int ID { get; set; }
 
         [StringLength(150)]
         [Required(ErrorMessage = "Nom obligatoire.")]
