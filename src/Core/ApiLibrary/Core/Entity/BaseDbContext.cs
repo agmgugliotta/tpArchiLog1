@@ -11,12 +11,10 @@ namespace CatalogAPI.Core.Entity
     {
         public BaseDbContext() : base()
         {
-
         }
 
         public BaseDbContext(DbContextOptions options) : base(options)
         {
-
         }
 
         public override int SaveChanges()
@@ -45,7 +43,8 @@ namespace CatalogAPI.Core.Entity
 
         private void AddTracking()
         {
-            var entries = ChangeTracker.Entries().Where(x => x.Entity is BaseEntity && (x.State == EntityState.Added || x.State == EntityState.Modified));
+            var entries = ChangeTracker.Entries().Where(x => x.Entity is BaseEntity && (x.State == EntityState.Added || x.State == EntityState.Modified || x.State == EntityState.Deleted));
+
             foreach (var item in entries)
             {
                 if (item.State == EntityState.Deleted)
@@ -59,5 +58,6 @@ namespace CatalogAPI.Core.Entity
                 ((BaseEntity)item.Entity).UpdateAt = DateTime.Now;
             }
         }
+
     }
 }

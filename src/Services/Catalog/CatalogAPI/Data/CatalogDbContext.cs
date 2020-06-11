@@ -1,4 +1,5 @@
-﻿using CatalogAPI.Models;
+﻿using CatalogAPI.Core.Entity;
+using CatalogAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CatalogAPI.Data
 {
-    public class CatalogDbContext : DbContext
+    public class CatalogDbContext : BaseDbContext
     {
         public CatalogDbContext(DbContextOptions options) : base(options)
         {

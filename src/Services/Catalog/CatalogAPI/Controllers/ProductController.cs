@@ -28,10 +28,22 @@ namespace CatalogAPI.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<ActionResult> GetProducts()
         {
-            var products = _db.Products.Where(x => x.DeletedAt == null);
+            var products = _db.Products.Where(x => x.DeleteAt == null);
 
             return Ok(products);
         }
+
+        [HttpGet("{id}")]
+        [ProducesResponseType(typeof(Product), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        public async Task<ActionResult> GetProductById(int id)
+        {
+            var product = await _db.Products.SingleOrDefaultAsync(x => x.ID == id);
+            if (product == null)
+                return NotFound();
+            return Ok(product);
+        }
+
 
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
@@ -48,6 +60,26 @@ namespace CatalogAPI.Controllers
             else
                 return BadRequest(ModelState);
         }
+
+        [HttpPut("{id}")]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        public async Task<ActionResult> PutProduct([FromBody] Product product, [FromRoute] int id)
+        {
+            if (id != product.ID)
+                return BadRequest();
+
+            if (ModelState.IsValid)
+            {
+                _db.Products.Update(product);
+                await _db.SaveChangesAsync();
+
+                return NoContent();
+            }
+            else
+                return BadRequest(ModelState);
+        }
+
 
         [HttpDelete("{id}")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]

@@ -1,4 +1,5 @@
-﻿using CatalogAPI.Core.Entity;
+﻿using ApiLibrary.Core.Entity;
+using CatalogAPI.Core.Entity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
