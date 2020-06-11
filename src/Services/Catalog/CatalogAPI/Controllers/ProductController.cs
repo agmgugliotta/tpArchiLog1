@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using CatalogAPI.Core.Entity;
 using CatalogAPI.Data;
 using CatalogAPI.Models;
 using Microsoft.AspNetCore.Http;
@@ -68,6 +69,8 @@ namespace CatalogAPI.Controllers
         {
             if (id != product.ID)
                 return BadRequest();
+
+            var properties = typeof(BaseEntity).GetProperties();
 
             if (ModelState.IsValid)
             {

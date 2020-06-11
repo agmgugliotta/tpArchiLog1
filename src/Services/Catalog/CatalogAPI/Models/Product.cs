@@ -12,6 +12,20 @@ namespace CatalogAPI.Models
     public class Product : BaseModel<int>
     {
         //public int ID { get; set; }
+        [StringLength(150)]
+        [Required(ErrorMessage = "Nom obligatoire.")]
+        public int Name { get; set; }
+
+        public int Description { get; set; }
+
+        [Column(TypeName = "decimal(6,2)")]
+        [Required]
+        public decimal Price { get; set; }
+    }
+
+    public class ProductDTO
+    {
+        public int ID { get; set; }
 
         [StringLength(150)]
         [Required(ErrorMessage = "Nom obligatoire.")]

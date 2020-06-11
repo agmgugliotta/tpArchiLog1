@@ -1,7 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ApiLibrary.Core.Attributes;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices.ComTypes;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -47,14 +51,34 @@ namespace CatalogAPI.Core.Entity
 
             foreach (var item in entries)
             {
+                if (item.State == EntityState.Modified)
+                {
+                    var properties = item.Entity.GetType().GetProperties();
+                    foreach (var prop in properties)
+                    {
+                        if(prop.GetCustomAttribute<NoModifiedAttribute>() == null)
+                        {
+                            item.Property(prop.Name).IsModified = false;
+                        }
+                    }
+
+                    /*item.Property("CreatedAt").IsModified = false;
+                    item.Property("ID").IsModified = false;
+                    item.Property("DeletedAt").IsModified = false;*/
+                }
+
                 if (item.State == EntityState.Deleted)
                 {
                     ((BaseEntity)item.Entity).DeleteAt = DateTime.Now;
+                    item.Property("DeletedAt").IsModified = false;
                     item.State = EntityState.Modified;
                 }
 
                 if (item.State == EntityState.Added)
+                {
                     ((BaseEntity)item.Entity).CreatedAt = DateTime.Now;
+                    item.Property("CreatedAt").IsModified = false;
+                }
                 ((BaseEntity)item.Entity).UpdateAt = DateTime.Now;
             }
         }
