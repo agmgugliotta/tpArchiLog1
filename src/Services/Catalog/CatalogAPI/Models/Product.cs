@@ -21,6 +21,10 @@ namespace CatalogAPI.Models
         [Column(TypeName = "decimal(6,2)")]
         [Required]
         public decimal Price { get; set; }
+
+        public int CategoryID { get; set; }
+        [ForeignKey("CategoryID")]
+        public Category category { get; set; }
     }
 
     public class ProductDTO

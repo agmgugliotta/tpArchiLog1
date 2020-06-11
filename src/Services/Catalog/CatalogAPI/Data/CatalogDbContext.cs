@@ -27,5 +27,7 @@ namespace CatalogAPI.Data
         }
 
         public DbSet<Product> Products { get; set; }
+
+        public DbSet<Category> Category { get; set; }
     }
 }
