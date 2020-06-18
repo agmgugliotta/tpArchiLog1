@@ -23,7 +23,6 @@ namespace CatalogAPI.Core.Entity
 
         public override int SaveChanges()
         {
-            AddTracking();
             return base.SaveChanges();
         }
 
@@ -41,7 +40,6 @@ namespace CatalogAPI.Core.Entity
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            AddTracking();
             return base.SaveChangesAsync(cancellationToken);
         }
 
@@ -56,32 +54,27 @@ namespace CatalogAPI.Core.Entity
                     var properties = item.Entity.GetType().GetProperties();
                     foreach (var prop in properties)
                     {
-                        if(prop.GetCustomAttribute<NoModifiedAttribute>() == null)
+                        if (prop.GetCustomAttribute<NoModifiedAttribute>() != null)
                         {
                             item.Property(prop.Name).IsModified = false;
                         }
                     }
 
-                    /*item.Property("CreatedAt").IsModified = false;
-                    item.Property("ID").IsModified = false;
-                    item.Property("DeletedAt").IsModified = false;*/
+                   ((BaseEntity)item.Entity).UpdateAt = DateTime.Now;
                 }
 
                 if (item.State == EntityState.Deleted)
                 {
                     ((BaseEntity)item.Entity).DeleteAt = DateTime.Now;
-                    item.Property("DeletedAt").IsModified = false;
                     item.State = EntityState.Modified;
                 }
 
                 if (item.State == EntityState.Added)
                 {
                     ((BaseEntity)item.Entity).CreatedAt = DateTime.Now;
-                    item.Property("CreatedAt").IsModified = false;
                 }
-                ((BaseEntity)item.Entity).UpdateAt = DateTime.Now;
+
             }
         }
-
     }
 }
