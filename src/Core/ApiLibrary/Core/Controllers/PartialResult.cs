@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ApiLibrary.Core.Controllers
 {
-    class PartialResult : ActionResult, IActionResult
+    public class PartialResult : ActionResult, IActionResult
     {
         private readonly object _result;
         public PartialResult(object result)
